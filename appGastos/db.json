@@ -1,0 +1,39 @@
+{
+  "gastos": [
+    {
+      "id": "1",
+      "concepto": "Supermercado mensual",
+      "monto": 85000,
+      "categoria": "Comida",
+      "fecha": "2026-06-01"
+    },
+    {
+      "id": "2",
+      "concepto": "Suscripción Netflix",
+      "monto": 7200,
+      "categoria": "Entretenimiento",
+      "fecha": "2026-06-02"
+    },
+    {
+      "id": "3",
+      "concepto": "Carga de combustible",
+      "monto": 25000,
+      "categoria": "Transporte",
+      "fecha": "2026-05-28"
+    },
+    {
+      "id": "4",
+      "concepto": "Factura de Luz",
+      "monto": 18400,
+      "categoria": "Servicios",
+      "fecha": "2026-05-15"
+    }
+  ],
+  "categorias": [
+    "Comida",
+    "Transporte",
+    "Servicios",
+    "Entretenimiento",
+    "Otros"
+  ]
+}
