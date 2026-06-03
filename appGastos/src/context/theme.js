@@ -13,10 +13,11 @@ export const getDesignTokens = (mode) => ({
           },
           accent: {
             main: '#2effbdff',
+            dim: '#2effbd82',
             contrastText: '#006132ff',
           },
           tertiary: {
-            main: '#311432',
+            main: '#570036ff',
             contrastText: '#ffffff',
           },
           error: {
@@ -50,6 +51,7 @@ export const getDesignTokens = (mode) => ({
           },
           accent: {
             main: '#1a263e',
+            dim: '#1a263e82',
             contrastText: '#a2bdff',
           },
           tertiary: {

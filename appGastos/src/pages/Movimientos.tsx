@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import Transactions from "../components/Movements";
+import Movements from "../components/Movements";
 
 const Movimientos = () => {
   return (
     <Box>
-      <Transactions isRecent={false} />
+      <Movements isRecent={false} />
     </Box>
   );
 };

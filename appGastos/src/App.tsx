@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard";
 import Movimientos from "./pages/Movimientos";
 import Categorias from "./pages/Categorias";
 import { useState } from "react";
+import ChooseTypeDialog from "./components/ChooseTypeDialog";
+import AddIncomeExpense from "./pages/AddIncomeExpense";
 
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -33,6 +35,8 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/movimientos" element={<Movimientos />} />
             <Route path="/categorias" element={<Categorias />} />
+            <Route path="/add-gasto" element={<AddIncomeExpense type="gasto" />} />
+            <Route path="/add-ingreso" element={<AddIncomeExpense type="ingreso" />} />
           </Routes>
         </Box>
       </Box>

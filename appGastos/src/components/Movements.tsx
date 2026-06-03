@@ -12,28 +12,33 @@ import {
   Box,
   Chip,
 } from "@mui/material";
-import { getGastos, type Gasto } from "../services/gastosService";
+import { useTheme } from "@mui/material/styles";
+import { getMovimientos, type Movimiento } from "../services/gastosService";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getCategoryChipStyles } from "../utils/categoryColors";
 
 const Movements = ({ isRecent }: { isRecent: boolean }) => {
-  const [gastos, setGastos] = useState<Gasto[]>([]);
+  const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
+  const theme = useTheme();
 
   useEffect(() => {
-    async function fetchGastos() {
-      const gastos = await getGastos();
-      setGastos(gastos);
+    async function fetchMovimientos() {
+      const movimientos = await getMovimientos();
+      setMovimientos(movimientos);
     }
-    fetchGastos();
+    fetchMovimientos();
   }, []);
 
-  const sortedGastos = gastos.toSorted((a, b) => {
+  const sortedMovimientos = movimientos.toSorted((a, b) => {
     const dateDiff = b.fecha.localeCompare(a.fecha);
     if (dateDiff !== 0) return dateDiff;
     return Number(b.id) - Number(a.id);
   });
 
-  const gastosAMostrar = isRecent ? sortedGastos.slice(0, 5) : sortedGastos;
+  const movimientosAMostrar = isRecent
+    ? sortedMovimientos.slice(0, 5)
+    : sortedMovimientos;
 
   const tableHeadeCells = [
     { id: "Fecha", label: "Fecha", align: "left" },
@@ -79,7 +84,12 @@ const Movements = ({ isRecent }: { isRecent: boolean }) => {
         }}
       >
         <Table>
-          <TableHead sx={{ bgcolor: (theme) => theme.palette.mode === 'light' ? '#dfe7ffff' : 'surface.low' }}>
+          <TableHead
+            sx={{
+              bgcolor: (theme) =>
+                theme.palette.mode === "light" ? "#dfe7ffff" : "surface.low",
+            }}
+          >
             <TableRow>
               {tableHeadeCells.map((headCell) => (
                 <TableCell
@@ -97,23 +107,31 @@ const Movements = ({ isRecent }: { isRecent: boolean }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {gastosAMostrar.map((gasto) => (
+            {movimientosAMostrar.map((movimiento) => (
               <TableRow
-                key={gasto.id}
+                key={movimiento.id}
                 sx={{ "&:hover": { bgcolor: "surface.container" } }}
               >
-                <TableCell>{gasto.fecha}</TableCell>
-                <TableCell sx={{ fontWeight: 500 }}>{gasto.concepto}</TableCell>
+                <TableCell>{movimiento.fecha}</TableCell>
+                <TableCell sx={{ fontWeight: 500 }}>
+                  {movimiento.concepto}
+                </TableCell>
                 <TableCell>
-                  <Chip label={gasto.categoria} sx={{ backgroundColor: "accent.main" }} />
+                  <Chip
+                    label={movimiento.categoria}
+                    sx={{
+                      textTransform: "uppercase",
+                      fontWeight: 600,
+                      ...getCategoryChipStyles(movimiento.categoria, theme.palette.mode),
+                    }}
+                  />
                 </TableCell>
                 <TableCell
                   align="right"
-                  sx={{ fontWeight: 600, color: "error.main" }}
+                  sx={{ fontWeight: 600, color: movimiento.tipo === "ingreso" ? "success.dark" : "error.main" }}
                 >
-                  ${gasto.monto.toFixed(2)}
+                  ${movimiento.monto.toFixed(2)}
                 </TableCell>
-                
               </TableRow>
             ))}
           </TableBody>

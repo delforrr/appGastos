@@ -1,17 +1,23 @@
 import axios from "axios";
 
-export interface Gasto {
+export interface Movimiento {
   id: number;
   concepto: string;
   categoria: string;
   monto: number;
   fecha: string;
+  tipo: string;
 }
 
 export interface Categoria {
   id: number;
   nombre: string;
   descripcion: string;
+}
+
+export interface TipoMovimiento {
+  id: number;
+  nombre: string;
 }
 
 const BASE_URL = "http://localhost:3001";
@@ -23,35 +29,45 @@ const api = axios.create({
   },
 });
 
-// TODO: Ver como implementar esto sin backend
-export const getIngresos = async (): Promise<Gasto[]> => {
-  const response = await api.get<Gasto[]>("/gastos");
+// Movimientos
+
+export const getMovimientos = async (): Promise<Movimiento[]> => {
+  const response = await api.get<Movimiento[]>("/movimientos");
   return response.data;
 };
 
-export const getGastos = async (): Promise<Gasto[]> => {
-  const response = await api.get<Gasto[]>("/gastos");
+export const getMovimientoById = async (id: number): Promise<Movimiento> => {
+  const response = await api.get<Movimiento>(`/movimientos/${id}`);
   return response.data;
 };
 
-export const getGastoById = async (id: number): Promise<Gasto> => {
-  const response = await api.get<Gasto>(`/gastos/${id}`);
+export const createMovimiento = async (movimiento: Movimiento): Promise<Movimiento> => {
+  const response = await api.post<Movimiento>("/movimientos", movimiento);
   return response.data;
 };
 
-export const createGasto = async (gasto: Gasto): Promise<Gasto> => {
-  const response = await api.post<Gasto>("/gastos", gasto);
+export const deleteMovimiento = async (id: number): Promise<void> => {
+  await api.delete(`/movimientos/${id}`);
+};
+
+export const updateMovimiento = async (movimiento: Movimiento): Promise<Movimiento> => {
+  const response = await api.put<Movimiento>(`/movimientos/${movimiento.id}`, movimiento);
   return response.data;
 };
 
-export const deleteGasto = async (id: number): Promise<void> => {
-  await api.delete(`/gastos/${id}`);
-};
+// Tipo de Movimiento
 
-export const updateGasto = async (gasto: Gasto): Promise<Gasto> => {
-  const response = await api.put<Gasto>(`/gastos/${gasto.id}`, gasto);
+export const getTiposMovimientos = async (): Promise<TipoMovimiento[]> => {
+  const response = await api.get<TipoMovimiento[]>("/tiposMovimientos");
   return response.data;
 };
+
+export const getTipoMovimientoById = async (id: number): Promise<TipoMovimiento> => {
+  const response = await api.get<TipoMovimiento>(`/tiposMovimientos/${id}`);
+  return response.data;
+};
+
+// Categorias
 
 export const getCategoriaById = async (id: number): Promise<Categoria> => {
   const response = await api.get<Categoria>(`/categorias/${id}`);

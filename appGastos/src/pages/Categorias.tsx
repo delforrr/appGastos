@@ -7,10 +7,13 @@ import {
   ListItemText,
   Paper,
 } from "@mui/material";
-import { getCategorias } from "../services/gastosService";
+import { useTheme } from "@mui/material/styles";
+import { getCategorias, type Categoria } from "../services/gastosService";
+import { getCategoryColor } from "../utils/categoryColors";
 
 const Categorias = () => {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Categoria[]>([]);
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchCategorias = async () => {
@@ -31,30 +34,55 @@ const Categorias = () => {
         sx={{
           border: "1px solid",
           borderColor: "outline.variant",
-          borderRadius: 2,
+          borderRadius: 3,
           overflow: "hidden",
+          boxShadow: theme.palette.mode === "light" 
+            ? "0 4px 20px rgba(0, 0, 0, 0.05)" 
+            : "0 4px 20px rgba(0, 0, 0, 0.3)",
         }}
       >
         <List disablePadding>
-          {categories.map((category) => (
-            <ListItem
-              key={category.id}
-              sx={{
-                px: 3,
-                py: 2,
-                transition: "0.3s",
-                borderBottom: "1px solid",
-                borderColor: "outline.variant",
-                "&:last-child": { borderBottom: "none" },
-                "&:hover": { bgcolor: "surface.container" },
-              }}
-            >
-              <ListItemText
-                primary={category.nombre}
-                secondary={category.descripcion}
-              />
-            </ListItem>
-          ))}
+          {categories.map((category) => {
+            const catColor = getCategoryColor(category.nombre);
+            return (
+              <ListItem
+                key={category.id}
+                sx={{
+                  px: 3,
+                  py: 2.5,
+                  transition: "0.2s ease-in-out",
+                  borderBottom: "1px solid",
+                  borderColor: "outline.variant",
+                  borderLeft: `6px solid ${catColor.base}`,
+                  "&:last-child": { borderBottom: "none" },
+                  "&:hover": { 
+                    bgcolor: "surface.container",
+                    pl: 3.5,
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: "50%",
+                    bgcolor: catColor.base,
+                    mr: 2.5,
+                    boxShadow: `0 0 8px ${catColor.base}bb`,
+                    flexShrink: 0,
+                  }}
+                />
+                <ListItemText
+                  primary={
+                    <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                      {category.nombre}
+                    </Typography>
+                  }
+                  secondary={category.descripcion}
+                />
+              </ListItem>
+            );
+          })}
         </List>
       </Paper>
     </Box>
