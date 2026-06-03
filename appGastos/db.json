@@ -27,13 +27,54 @@
       "monto": 18400,
       "categoria": "Servicios",
       "fecha": "2026-05-15"
+    },
+    {
+      "id": "5",
+      "concepto": "Compra en Librería",
+      "monto": 4500,
+      "categoria": "Material de Estudio",
+      "fecha": "2026-06-03"
+    },
+    {
+      "id": "6",
+      "concepto": "Cena con amigos",
+      "monto": 9800,
+      "categoria": "Entretenimiento",
+      "fecha": "2026-06-04"
+    },
+    {
+      "id": "7",
+      "concepto": "Spotify",
+      "monto": 4300,
+      "categoria": "Entretenimiento",
+      "fecha": "2026-06-01"
     }
   ],
   "categorias": [
-    "Comida",
-    "Transporte",
-    "Servicios",
-    "Entretenimiento",
-    "Otros"
+    {
+      "id": "1",
+      "nombre": "Comida",
+      "descripcion": "Compras de supermercado y comida rápida"
+    },
+    {
+      "id": "2",
+      "nombre": "Transporte",
+      "descripcion": "Subte, colectivos, taxi y combustible"
+    },
+    {
+      "id": "3",
+      "nombre": "Servicios",
+      "descripcion": "Luz, gas, internet, agua, etc."
+    },
+    {
+      "id": "4",
+      "nombre": "Entretenimiento",
+      "descripcion": "Salidas, cine, suscripciones online"
+    },
+    {
+      "id": "5",
+      "nombre": "Otros",
+      "descripcion": "Gastos generales varios"
+    }
   ]
 }

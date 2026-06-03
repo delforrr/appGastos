@@ -41,39 +41,39 @@ export const getDesignTokens = (mode) => ({
         }
       : {
           primary: {
-            main: '#dae2fd',
-            contrastText: '#131b2e',
+            main: '#a2bdff',
+            contrastText: '#0c1b3e',
           },
           secondary: {
-            main: '#6cf8bb',
-            contrastText: '#002113',
+            main: '#4ef2b2',
+            contrastText: '#003824',
           },
           accent: {
-            main: '#005236',
-            contrastText: '#6ffbbe',
+            main: '#1a263e',
+            contrastText: '#a2bdff',
           },
           tertiary: {
-            main: '#ffb2b7',
-            contrastText: '#40000d',
+            main: '#ffb2be',
+            contrastText: '#410011',
           },
           error: {
             main: '#ffb4ab',
             contrastText: '#690005',
           },
           background: {
-            default: '#0b1c30',
-            paper: '#131b2e',
+            default: '#0b0f19',
+            paper: '#151c2c',
           },
           text: {
-            primary: '#eaf1ff',
-            secondary: '#7c839b',
+            primary: '#f3f4f6',
+            secondary: '#9ca3af',
           },
           surface: {
-            low: '#1a243a',
-            container: '#212d47',
+            low: '#0f1625',
+            container: '#212d42',
           },
           outline: {
-            variant: '#3f465c',
+            variant: '#28354c',
           }
         }),
   },

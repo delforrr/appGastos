@@ -1,12 +1,24 @@
-import { Box, Typography, List, ListItem, ListItemText, Paper, Divider } from "@mui/material";
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+} from "@mui/material";
+import { getCategorias } from "../services/gastosService";
 
 const Categorias = () => {
-  const categories = [
-    { id: 1, name: "Alimentos", description: "Compras de supermercado y comida rápida" },
-    { id: 2, name: "Transporte", description: "Subte, colectivos, taxi y combustible" },
-    { id: 3, name: "Servicios", description: "Luz, gas, internet, agua, etc." },
-    { id: 4, name: "Entretenimiento", description: "Salidas, cine, suscripciones online" }
-  ];
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      const categorias = await getCategorias();
+      setCategories(categorias);
+    };
+    fetchCategorias();
+  }, []);
 
   return (
     <Box>
@@ -14,26 +26,34 @@ const Categorias = () => {
         Categorías de Gastos
       </Typography>
 
-      <Paper elevation={0} sx={{ border: "1px solid", borderColor: "outline.variant", borderRadius: 2, overflow: "hidden" }}>
+      <Paper
+        elevation={0}
+        sx={{
+          border: "1px solid",
+          borderColor: "outline.variant",
+          borderRadius: 2,
+          overflow: "hidden",
+        }}
+      >
         <List disablePadding>
-          {categories.map((c, index) => (
-            <Box key={c.id}>
-              <ListItem sx={{ py: 2, px: 3 }}>
-                <ListItemText 
-                  primary={
-                    <Typography sx={{ fontWeight: 600, color: "text.primary" }}>
-                      {c.name}
-                    </Typography>
-                  } 
-                  secondary={
-                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                      {c.description}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-              {index < categories.length - 1 && <Divider sx={{ borderColor: "outline.variant" }} />}
-            </Box>
+          {categories.map((category) => (
+            <ListItem
+              key={category.id}
+              sx={{
+                px: 3,
+                py: 2,
+                transition: "0.3s",
+                borderBottom: "1px solid",
+                borderColor: "outline.variant",
+                "&:last-child": { borderBottom: "none" },
+                "&:hover": { bgcolor: "surface.container" },
+              }}
+            >
+              <ListItemText
+                primary={category.nombre}
+                secondary={category.descripcion}
+              />
+            </ListItem>
           ))}
         </List>
       </Paper>

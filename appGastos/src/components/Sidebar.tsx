@@ -27,9 +27,9 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
             path: "/"
         },
         {
-            label: "Gastos",
+            label: "Movimientos",
             icon: AccountBalanceWallet,
-            path: "/gastos"
+            path: "/movimientos"
         },
         {
             label: "Categorías",
