@@ -16,18 +16,20 @@ import { useNavigate } from "react-router-dom";
 import {
   getTiposMovimientos,
   type TipoMovimiento,
-} from "../services/gastosService";
+} from "../services/movimientosService";
 import {
   ArrowUpward as ArrowUpwardIcon,
   ArrowDownward as ArrowDownwardIcon,
 } from "@mui/icons-material";
 
 interface Props {
+  type?: "ingreso" | "gasto";
+  typeAction?: (type: "ingreso" | "gasto") => void;
   open: boolean;
   onClose: () => void;
 }
 
-const ChooseTypeDialog = ({ open, onClose }: Props) => {
+const ChooseTypeDialog = ({ typeAction, open, onClose }: Props) => {
   const [tiposMovimientos, setTiposMovimientos] = useState<TipoMovimiento[]>(
     [],
   );
@@ -82,7 +84,11 @@ const ChooseTypeDialog = ({ open, onClose }: Props) => {
                 key={tipo.id}
                 onClick={() => {
                   onClose();
-                  navigate(isIngreso ? "/add-ingreso" : "/add-gasto");
+                  const selectedType = isIngreso ? "ingreso" : "gasto";
+                  typeAction?.(selectedType);
+                  navigate(
+                    selectedType === "ingreso" ? "/add-ingreso" : "/add-gasto",
+                  );
                 }}
                 sx={{
                   borderRadius: 3,

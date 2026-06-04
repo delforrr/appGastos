@@ -1,11 +1,11 @@
 {
-  "tiposMovimientos":[
+  "tiposMovimientos": [
     {
-      "id": 1,
+      "id": "1",
       "nombre": "Ingreso"
     },
     {
-      "id": 2,
+      "id": "2",
       "nombre": "Egreso"
     }
   ],
@@ -13,48 +13,55 @@
     {
       "id": "1",
       "nombre": "Comida",
-      "descripcion": "Compras de supermercado y comida rápida"
+      "descripcion": "Compras de supermercado y comida rápida",
+      "tipoCategoria": "gasto"
     },
     {
       "id": "2",
       "nombre": "Transporte",
-      "descripcion": "Subte, colectivos, taxi y combustible"
+      "descripcion": "Subte, colectivos, taxi y combustible",
+      "tipoCategoria": "gasto"
     },
     {
       "id": "3",
       "nombre": "Servicios",
-      "descripcion": "Luz, gas, internet, agua, etc."
+      "descripcion": "Luz, gas, internet, agua, etc.",
+      "tipoCategoria": "gasto"
     },
     {
       "id": "4",
       "nombre": "Entretenimiento",
-      "descripcion": "Salidas, cine, suscripciones online"
+      "descripcion": "Salidas, cine, suscripciones online",
+      "tipoCategoria": "gasto"
     },
     {
       "id": "5",
       "nombre": "Otros",
-      "descripcion": "Gastos generales varios"
+      "descripcion": "Gastos generales varios",
+      "tipoCategoria": "gasto"
     },
     {
       "id": "6",
       "nombre": "Sueldo",
-      "descripcion": "Sueldo mensual"
+      "descripcion": "Sueldo mensual",
+      "tipoCategoria": "ingreso"
     },
     {
       "id": "7",
       "nombre": "Venta",
-      "descripcion": "Venta de productos"
+      "descripcion": "Venta de productos",
+      "tipoCategoria": "ingreso"
     },
     {
       "id": "8",
       "nombre": "Ayuda económica",
-      "descripcion": "Ayuda económica de familiares"
+      "descripcion": "Ayuda económica de familiares",
+      "tipoCategoria": "ingreso"
     }
   ],
-
   "movimientos": [
     {
-      "id": 1,
+      "id": "1",
       "concepto": "Supermercado mensual",
       "monto": 85000,
       "categoria": "Comida",
@@ -62,7 +69,7 @@
       "tipo": "gasto"
     },
     {
-      "id": 2,
+      "id": "2",
       "concepto": "Suscripción Netflix",
       "monto": 7200,
       "categoria": "Entretenimiento",
@@ -70,7 +77,7 @@
       "tipo": "gasto"
     },
     {
-      "id": 3,
+      "id": "3",
       "concepto": "Carga de combustible",
       "monto": 25000,
       "categoria": "Transporte",
@@ -78,7 +85,7 @@
       "tipo": "gasto"
     },
     {
-      "id": 4,
+      "id": "4",
       "concepto": "Factura de Luz",
       "monto": 18400,
       "categoria": "Servicios",
@@ -86,7 +93,7 @@
       "tipo": "gasto"
     },
     {
-      "id": 5,
+      "id": "5",
       "concepto": "Compra en Librería",
       "monto": 4500,
       "categoria": "Material de Estudio",
@@ -94,7 +101,7 @@
       "tipo": "gasto"
     },
     {
-      "id": 6,
+      "id": "6",
       "concepto": "Cena con amigos",
       "monto": 9800,
       "categoria": "Entretenimiento",
@@ -102,7 +109,7 @@
       "tipo": "gasto"
     },
     {
-      "id": 7,
+      "id": "7",
       "concepto": "Spotify",
       "monto": 4300,
       "categoria": "Entretenimiento",
@@ -110,7 +117,7 @@
       "tipo": "gasto"
     },
     {
-      "id": 8,
+      "id": "8",
       "concepto": "Sueldo mensual",
       "monto": 250000,
       "categoria": "Sueldo",
@@ -118,12 +125,29 @@
       "tipo": "ingreso"
     },
     {
-      "id": 9,
+      "id": "9",
       "concepto": "Venta de remeras",
       "monto": 35000,
       "categoria": "Venta",
       "fecha": "2026-06-03",
       "tipo": "ingreso"
+    },
+    {
+      "concepto": "Test POST",
+      "categoria": "Comida",
+      "monto": 1500,
+      "fecha": "2026-06-04",
+      "tipo": "gasto",
+      "id": "2Qqox0of8XI"
+    },
+    {
+      "concepto": "Gimnasio Argentino",
+      "categoria": "Otros",
+      "monto": 35000,
+      "fecha": "2026-06-04T03:00:00.000Z",
+      "tipo": "gasto",
+      "id": "YpLS3gb-JMs"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

@@ -14,7 +14,7 @@ interface BalanceCardProps {
   isPositive?: boolean;
 }
 
-const BalanceCard = ({
+const MainCard = ({
   type,
   amount = 0,
   percentage = "+0.0%",
@@ -130,4 +130,4 @@ const BalanceCard = ({
   );
 };
 
-export default BalanceCard;
+export default MainCard;

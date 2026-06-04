@@ -8,7 +8,7 @@ import {
   Paper,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { getCategorias, type Categoria } from "../services/gastosService";
+import { getCategorias, type Categoria } from "../services/movimientosService";
 import { getCategoryColor } from "../utils/categoryColors";
 
 const Categorias = () => {
@@ -36,9 +36,10 @@ const Categorias = () => {
           borderColor: "outline.variant",
           borderRadius: 3,
           overflow: "hidden",
-          boxShadow: theme.palette.mode === "light" 
-            ? "0 4px 20px rgba(0, 0, 0, 0.05)" 
-            : "0 4px 20px rgba(0, 0, 0, 0.3)",
+          boxShadow:
+            theme.palette.mode === "light"
+              ? "0 4px 20px rgba(0, 0, 0, 0.05)"
+              : "0 4px 20px rgba(0, 0, 0, 0.3)",
         }}
       >
         <List disablePadding>
@@ -55,7 +56,7 @@ const Categorias = () => {
                   borderColor: "outline.variant",
                   borderLeft: `6px solid ${catColor.base}`,
                   "&:last-child": { borderBottom: "none" },
-                  "&:hover": { 
+                  "&:hover": {
                     bgcolor: "surface.container",
                     pl: 3.5,
                   },

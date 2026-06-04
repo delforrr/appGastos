@@ -1,11 +1,11 @@
 import axios from "axios";
 
 export interface Movimiento {
-  id: number;
+  id: number | string;
   concepto: string;
   categoria: string;
   monto: number;
-  fecha: string;
+  fecha: Date;
   tipo: string;
 }
 
@@ -13,6 +13,7 @@ export interface Categoria {
   id: number;
   nombre: string;
   descripcion: string;
+  tipoCategoria: string;
 }
 
 export interface TipoMovimiento {
@@ -36,17 +37,17 @@ export const getMovimientos = async (): Promise<Movimiento[]> => {
   return response.data;
 };
 
-export const getMovimientoById = async (id: number): Promise<Movimiento> => {
+export const getMovimientoById = async (id: number | string): Promise<Movimiento> => {
   const response = await api.get<Movimiento>(`/movimientos/${id}`);
   return response.data;
 };
 
-export const createMovimiento = async (movimiento: Movimiento): Promise<Movimiento> => {
+export const createMovimiento = async (movimiento: Omit<Movimiento, "id">): Promise<Movimiento> => {
   const response = await api.post<Movimiento>("/movimientos", movimiento);
   return response.data;
 };
 
-export const deleteMovimiento = async (id: number): Promise<void> => {
+export const deleteMovimiento = async (id: number | string): Promise<void> => {
   await api.delete(`/movimientos/${id}`);
 };
 

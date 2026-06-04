@@ -7,7 +7,6 @@ import Dashboard from "./pages/Dashboard";
 import Movimientos from "./pages/Movimientos";
 import Categorias from "./pages/Categorias";
 import { useState } from "react";
-import ChooseTypeDialog from "./components/ChooseTypeDialog";
 import AddIncomeExpense from "./pages/AddIncomeExpense";
 
 function App() {

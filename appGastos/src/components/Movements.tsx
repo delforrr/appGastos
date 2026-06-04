@@ -13,27 +13,40 @@ import {
   Chip,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { getMovimientos, type Movimiento } from "../services/gastosService";
+import {
+  getMovimientos,
+  type Movimiento,
+} from "../services/movimientosService";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getCategoryChipStyles } from "../utils/categoryColors";
 
-const Movements = ({ isRecent }: { isRecent: boolean }) => {
-  const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
+interface MovementsProps {
+  isRecent: boolean;
+  movimientos?: Movimiento[];
+}
+
+const Movements = ({ isRecent, movimientos: movimientosProp }: MovementsProps) => {
+  const [localMovimientos, setLocalMovimientos] = useState<Movimiento[]>([]);
   const theme = useTheme();
 
   useEffect(() => {
+    if (movimientosProp) return;
     async function fetchMovimientos() {
-      const movimientos = await getMovimientos();
-      setMovimientos(movimientos);
+      const data = await getMovimientos();
+      setLocalMovimientos(data);
     }
     fetchMovimientos();
-  }, []);
+  }, [movimientosProp]);
+
+  const movimientos = movimientosProp || localMovimientos;
 
   const sortedMovimientos = movimientos.toSorted((a, b) => {
-    const dateDiff = b.fecha.localeCompare(a.fecha);
+    const dateA = new Date(a.fecha);
+    const dateB = new Date(b.fecha);
+    const dateDiff = dateB.getTime() - dateA.getTime();
     if (dateDiff !== 0) return dateDiff;
-    return Number(b.id) - Number(a.id);
+    return String(b.id).localeCompare(String(a.id));
   });
 
   const movimientosAMostrar = isRecent
@@ -112,7 +125,11 @@ const Movements = ({ isRecent }: { isRecent: boolean }) => {
                 key={movimiento.id}
                 sx={{ "&:hover": { bgcolor: "surface.container" } }}
               >
-                <TableCell>{movimiento.fecha}</TableCell>
+                <TableCell>
+                  {typeof movimiento.fecha === "string"
+                    ? movimiento.fecha
+                    : movimiento.fecha.toISOString().split("T")[0]}
+                </TableCell>
                 <TableCell sx={{ fontWeight: 500 }}>
                   {movimiento.concepto}
                 </TableCell>
@@ -122,13 +139,22 @@ const Movements = ({ isRecent }: { isRecent: boolean }) => {
                     sx={{
                       textTransform: "uppercase",
                       fontWeight: 600,
-                      ...getCategoryChipStyles(movimiento.categoria, theme.palette.mode),
+                      ...getCategoryChipStyles(
+                        movimiento.categoria,
+                        theme.palette.mode,
+                      ),
                     }}
                   />
                 </TableCell>
                 <TableCell
                   align="right"
-                  sx={{ fontWeight: 600, color: movimiento.tipo === "ingreso" ? "success.dark" : "error.main" }}
+                  sx={{
+                    fontWeight: 600,
+                    color:
+                      movimiento.tipo === "ingreso"
+                        ? "success.dark"
+                        : "error.main",
+                  }}
                 >
                   ${movimiento.monto.toFixed(2)}
                 </TableCell>

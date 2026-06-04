@@ -1,11 +1,13 @@
 import { Box, Typography, Grid } from "@mui/material";
-import BalanceCard from "../components/BalanceCard";
+import MainCard from "../components/MainCard";
 import RecentTransactions from "../components/Movements";
 import { useEffect, useState } from "react";
-import { getMovimientos, type Movimiento } from "../services/gastosService";
+import {
+  getMovimientos,
+  type Movimiento,
+} from "../services/movimientosService";
 
 const Dashboard = () => {
-
   // Esto va al backend
   const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
 
@@ -36,34 +38,34 @@ const Dashboard = () => {
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid size={{ xs: 12, md: 4 }}>
-          <BalanceCard 
-            type="balance" 
-            amount={balance} 
-            percentage="+12.4%" 
-            isPositive={true} 
+          <MainCard
+            type="balance"
+            amount={balance}
+            percentage="+12.4%"
+            isPositive={true}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <BalanceCard 
-            type="ingresos" 
-            amount={totalIngresos} 
-            percentage="+8.2%" 
-            isPositive={true} 
+          <MainCard
+            type="ingresos"
+            amount={totalIngresos}
+            percentage="+8.2%"
+            isPositive={true}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <BalanceCard 
-            type="gastos" 
-            amount={totalGastos} 
-            percentage="-3.2%" 
-            isPositive={false} 
+          <MainCard
+            type="gastos"
+            amount={totalGastos}
+            percentage="-3.2%"
+            isPositive={false}
           />
         </Grid>
       </Grid>
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <RecentTransactions isRecent={true} />
+          <RecentTransactions isRecent={true} movimientos={movimientos} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}></Grid>
       </Grid>

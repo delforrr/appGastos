@@ -16,7 +16,7 @@ import {
   Add,
 } from "@mui/icons-material";
 import ChooseTypeDialog from "./ChooseTypeDialog";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface SidebarProps {
   mobileOpen: boolean;
@@ -50,8 +50,6 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
       path: "/categorias",
     },
   ];
-
-  const navigate = useNavigate();
 
   const sidebarContent = (
     <Box
@@ -191,10 +189,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
         {sidebarContent}
       </Box>
 
-      <ChooseTypeDialog
-        open={open}
-        onClose={() => setOpen(false)}
-      />
+      <ChooseTypeDialog open={open} onClose={() => setOpen(false)} />
     </>
   );
 };
