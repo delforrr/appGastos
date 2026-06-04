@@ -147,6 +147,22 @@
       "fecha": "2026-06-04T03:00:00.000Z",
       "tipo": "gasto",
       "id": "YpLS3gb-JMs"
+    },
+    {
+      "concepto": "Carniceria",
+      "categoria": "Comida",
+      "monto": 14000,
+      "fecha": "2026-06-04T03:00:00.000Z",
+      "tipo": "gasto",
+      "id": "3dQQPbkCFyo"
+    },
+    {
+      "concepto": "Transferencia de Juan",
+      "categoria": "Ayuda económica",
+      "monto": 10000,
+      "fecha": "2026-06-04T03:00:00.000Z",
+      "tipo": "ingreso",
+      "id": "mlEFzUyKr7g"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

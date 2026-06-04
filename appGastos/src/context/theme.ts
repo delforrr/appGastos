@@ -1,4 +1,4 @@
-export const getDesignTokens = (mode) => ({
+export const getDesignTokens = (mode: 'light' | 'dark') => ({
   palette: {
     mode,
     ...(mode === 'light'

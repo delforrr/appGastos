@@ -16,11 +16,9 @@ const Categorias = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    const fetchCategorias = async () => {
-      const categorias = await getCategorias();
+    getCategorias().then((categorias) => {
       setCategories(categorias);
-    };
-    fetchCategorias();
+    });
   }, []);
 
   return (
@@ -74,11 +72,13 @@ const Categorias = () => {
                   }}
                 />
                 <ListItemText
-                  primary={
-                    <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                      {category.nombre}
-                    </Typography>
-                  }
+                  primary={category.nombre}
+                  slotProps={{
+                    primary: {
+                      variant: "h5",
+                      sx: { fontWeight: 600 }
+                    }
+                  }}
                   secondary={category.descripcion}
                 />
               </ListItem>

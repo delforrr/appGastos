@@ -37,11 +37,9 @@ const ChooseTypeDialog = ({ typeAction, open, onClose }: Props) => {
   const theme = useTheme();
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      const tiposMovimientos = await getTiposMovimientos();
+    getTiposMovimientos().then((tiposMovimientos) => {
       setTiposMovimientos(tiposMovimientos);
-    };
-    fetchCategories();
+    });
   }, []);
 
   return (

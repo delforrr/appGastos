@@ -23,8 +23,27 @@ interface SidebarProps {
   onClose: () => void;
 }
 
+const WIDTH = 300;
+
+const items = [
+  {
+    label: "Dashboard",
+    icon: Dashboard,
+    path: "/",
+  },
+  {
+    label: "Movimientos",
+    icon: AccountBalanceWallet,
+    path: "/movimientos",
+  },
+  {
+    label: "Categorías",
+    icon: Category,
+    path: "/categorias",
+  },
+];
+
 const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
-  const WIDTH = 300;
   const location = useLocation();
 
   const [open, setOpen] = useState(false);
@@ -32,24 +51,6 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
   const handleNew = () => {
     setOpen(true);
   };
-
-  const items = [
-    {
-      label: "Dashboard",
-      icon: Dashboard,
-      path: "/",
-    },
-    {
-      label: "Movimientos",
-      icon: AccountBalanceWallet,
-      path: "/movimientos",
-    },
-    {
-      label: "Categorías",
-      icon: Category,
-      path: "/categorias",
-    },
-  ];
 
   const sidebarContent = (
     <Box

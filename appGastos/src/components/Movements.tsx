@@ -14,32 +14,25 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import {
-  getMovimientos,
   type Movimiento,
 } from "../services/movimientosService";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getCategoryChipStyles } from "../utils/categoryColors";
 
 interface MovementsProps {
   isRecent: boolean;
-  movimientos?: Movimiento[];
+  movimientos: Movimiento[];
 }
 
-const Movements = ({ isRecent, movimientos: movimientosProp }: MovementsProps) => {
-  const [localMovimientos, setLocalMovimientos] = useState<Movimiento[]>([]);
+const tableHeadeCells = [
+  { id: "Fecha", label: "Fecha", align: "left" },
+  { id: "Detalle", label: "Detalle", align: "left" },
+  { id: "Categoría", label: "Categoría", align: "left" },
+  { id: "Monto", label: "Monto", align: "right" },
+] as const;
+
+const Movements = ({ isRecent, movimientos }: MovementsProps) => {
   const theme = useTheme();
-
-  useEffect(() => {
-    if (movimientosProp) return;
-    async function fetchMovimientos() {
-      const data = await getMovimientos();
-      setLocalMovimientos(data);
-    }
-    fetchMovimientos();
-  }, [movimientosProp]);
-
-  const movimientos = movimientosProp || localMovimientos;
 
   const sortedMovimientos = movimientos.toSorted((a, b) => {
     const dateA = new Date(a.fecha);
@@ -52,13 +45,6 @@ const Movements = ({ isRecent, movimientos: movimientosProp }: MovementsProps) =
   const movimientosAMostrar = isRecent
     ? sortedMovimientos.slice(0, 5)
     : sortedMovimientos;
-
-  const tableHeadeCells = [
-    { id: "Fecha", label: "Fecha", align: "left" },
-    { id: "Detalle", label: "Detalle", align: "left" },
-    { id: "Categoría", label: "Categoría", align: "left" },
-    { id: "Monto", label: "Monto", align: "right" },
-  ] as const;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -126,9 +112,11 @@ const Movements = ({ isRecent, movimientos: movimientosProp }: MovementsProps) =
                 sx={{ "&:hover": { bgcolor: "surface.container" } }}
               >
                 <TableCell>
-                  {typeof movimiento.fecha === "string"
-                    ? movimiento.fecha
-                    : movimiento.fecha.toISOString().split("T")[0]}
+                  {new Date(movimiento.fecha).toLocaleDateString("es-AR", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
                 </TableCell>
                 <TableCell sx={{ fontWeight: 500 }}>
                   {movimiento.concepto}

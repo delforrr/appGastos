@@ -78,11 +78,9 @@ const AddIncomeExpense = ({ type }: Props) => {
   };
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      const categories = await getCategorias();
+    getCategorias().then((categories) => {
       setCategories(categories);
-    };
-    fetchCategories();
+    });
   }, []);
 
   return (

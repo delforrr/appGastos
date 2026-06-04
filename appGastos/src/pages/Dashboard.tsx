@@ -12,11 +12,9 @@ const Dashboard = () => {
   const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
 
   useEffect(() => {
-    async function fetchMovimientos() {
-      const data = await getMovimientos();
+    getMovimientos().then((data) => {
       setMovimientos(data);
-    }
-    fetchMovimientos();
+    });
   }, []);
 
   const totalIngresos = movimientos
