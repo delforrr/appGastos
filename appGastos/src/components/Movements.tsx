@@ -17,10 +17,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Skeleton,
+  TableSortLabel,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useTheme } from "@mui/material/styles";
-import { type Movimiento } from "../services/movimientosService";
+import { type Movimiento, type Categoria } from "../services/movimientosService";
 import { Link } from "react-router-dom";
 import { getCategoryChipStyles } from "../utils/categoryColors";
 import { useState } from "react";
@@ -28,8 +31,10 @@ import { useState } from "react";
 interface MovementsProps {
   isRecent: boolean;
   movimientos: Movimiento[];
+  categorias?: Categoria[];
   canDelete?: boolean;
   onDelete?: (id: string | number) => void;
+  loading?: boolean;
 }
 
 const tableHeadeCells = [
@@ -40,10 +45,20 @@ const tableHeadeCells = [
   { id: "Acciones", label: "Acciones", align: "right" },
 ] as const;
 
-const Movements = ({ isRecent, movimientos, canDelete, onDelete }: MovementsProps) => {
+const Movements = ({
+  isRecent,
+  movimientos,
+  categorias = [],
+  canDelete,
+  onDelete,
+  loading = false,
+}: MovementsProps) => {
   const theme = useTheme();
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedId, setSelectedId] = useState<string | number | null>(null);
+
+  const [orderBy, setOrderBy] = useState<"fecha" | "monto">("fecha");
+  const [order, setOrder] = useState<"asc" | "desc">("desc");
 
   const headers = canDelete
     ? tableHeadeCells
@@ -67,11 +82,31 @@ const Movements = ({ isRecent, movimientos, canDelete, onDelete }: MovementsProp
     setSelectedId(null);
   };
 
+  const handleRequestSort = (property: "fecha" | "monto") => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const getCategoryName = (catId: string | number) => {
+    const cat = categorias.find((c) => String(c.id) === String(catId));
+    return cat ? cat.nombre : "Otros";
+  };
+
   const sortedMovimientos = movimientos.toSorted((a, b) => {
-    const dateA = new Date(a.fecha);
-    const dateB = new Date(b.fecha);
-    const dateDiff = dateB.getTime() - dateA.getTime();
-    if (dateDiff !== 0) return dateDiff;
+    let valA, valB;
+    if (orderBy === "fecha") {
+      valA = new Date(a.fecha).getTime();
+      valB = new Date(b.fecha).getTime();
+    } else {
+      valA = a.monto;
+      valB = b.monto;
+    }
+
+    if (valA < valB) return order === "asc" ? -1 : 1;
+    if (valA > valB) return order === "asc" ? 1 : -1;
+    
+    // Fallback sort by ID if same date/amount
     return String(b.id).localeCompare(String(a.id));
   });
 
@@ -123,74 +158,132 @@ const Movements = ({ isRecent, movimientos, canDelete, onDelete }: MovementsProp
             }}
           >
             <TableRow>
-              {headers.map((headCell) => (
-                <TableCell
-                  key={headCell.id}
-                  sx={{
-                    fontSize: 16,
-                    textTransform: "uppercase",
-                    fontWeight: 700,
-                  }}
-                  align={headCell.align}
-                >
-                  {headCell.label}
-                </TableCell>
-              ))}
+              {headers.map((headCell) => {
+                const isSortable = headCell.id === "Fecha" || headCell.id === "Monto";
+                const propKey = headCell.id === "Fecha" ? "fecha" : "monto";
+                return (
+                  <TableCell
+                    key={headCell.id}
+                    sx={{
+                      fontSize: 16,
+                      textTransform: "uppercase",
+                      fontWeight: 700,
+                    }}
+                    align={headCell.align}
+                    sortDirection={orderBy === propKey ? order : false}
+                  >
+                    {isSortable ? (
+                      <TableSortLabel
+                        active={orderBy === propKey}
+                        direction={orderBy === propKey ? order : "asc"}
+                        onClick={() => handleRequestSort(propKey)}
+                      >
+                        {headCell.label}
+                      </TableSortLabel>
+                    ) : (
+                      headCell.label
+                    )}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
-            {movimientosAMostrar.map((movimiento) => (
-              <TableRow
-                key={movimiento.id}
-                sx={{ "&:hover": { bgcolor: "surface.container" } }}
-              >
-                <TableCell>
-                  {new Date(movimiento.fecha).toLocaleDateString("es-AR", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })}
-                </TableCell>
-                <TableCell sx={{ fontWeight: 500 }}>
-                  {movimiento.concepto}
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    label={movimiento.categoria}
-                    sx={{
-                      textTransform: "uppercase",
-                      fontWeight: 600,
-                      ...getCategoryChipStyles(
-                        movimiento.categoria,
-                        theme.palette.mode,
-                      ),
-                    }}
-                  />
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{
-                    fontWeight: 600,
-                    color:
-                      movimiento.tipo === "ingreso"
-                        ? "success.dark"
-                        : "error.main",
-                  }}
-                >
-                  ${movimiento.monto.toFixed(2)}
-                </TableCell>
-                {canDelete && (
-                  <TableCell align="right">
-                    <IconButton
-                      onClick={() => handleDeleteClick(movimiento.id)}
-                      sx={{ color: "error.main" }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+            {loading ? (
+              Array.from({ length: 5 }).map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Skeleton variant="text" width="60%" />
                   </TableCell>
-                )}
+                  <TableCell>
+                    <Skeleton variant="text" width="80%" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton variant="rounded" width={80} height={24} />
+                  </TableCell>
+                  <TableCell align="right">
+                    <Skeleton variant="text" width="50%" sx={{ ml: "auto" }} />
+                  </TableCell>
+                  {canDelete && (
+                    <TableCell align="right">
+                      <Skeleton variant="circular" width={24} height={24} sx={{ ml: "auto" }} />
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))
+            ) : movimientosAMostrar.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={headers.length} align="center" sx={{ py: 3 }}>
+                  <Typography variant="body1" color="text.secondary">
+                    No hay movimientos registrados
+                  </Typography>
+                </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              movimientosAMostrar.map((movimiento) => {
+                const catName = getCategoryName(movimiento.categoriaId);
+                return (
+                  <TableRow
+                    key={movimiento.id}
+                    sx={{ "&:hover": { bgcolor: "surface.container" } }}
+                  >
+                    <TableCell>
+                      {new Date(movimiento.fecha).toLocaleDateString("es-AR", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        timeZone: "UTC",
+                      })}
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 500 }}>
+                      {movimiento.concepto}
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={catName}
+                        sx={{
+                          textTransform: "uppercase",
+                          fontWeight: 600,
+                          ...getCategoryChipStyles(
+                            catName,
+                            theme.palette.mode,
+                          ),
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        fontWeight: 600,
+                        color:
+                          movimiento.tipo === "ingreso"
+                            ? "success.dark"
+                            : "error.main",
+                      }}
+                    >
+                      ${movimiento.monto.toFixed(2)}
+                    </TableCell>
+                    {canDelete && (
+                      <TableCell align="right">
+                        <IconButton
+                          component={Link}
+                          to={`/edit/${movimiento.id}`}
+                          sx={{ color: "primary.main", mr: 1 }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDeleteClick(movimiento.id)}
+                          sx={{ color: "error.main" }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              })
+            )}
           </TableBody>
         </Table>
       </TableContainer>

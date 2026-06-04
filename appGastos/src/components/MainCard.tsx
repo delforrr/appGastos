@@ -1,4 +1,4 @@
-import { Paper, Typography, Box, Stack } from "@mui/material";
+import { Paper, Typography, Box, Stack, Skeleton } from "@mui/material";
 import {
   AccountBalanceWallet as AccountBalanceWalletIcon,
   ArrowUpward as ArrowUpwardIcon,
@@ -8,10 +8,12 @@ import {
 } from "@mui/icons-material";
 
 interface BalanceCardProps {
-  type: "balance" | "gastos" | "ingresos";
+  type: "balance" | "gastos" | "ingresos" | "gasto_max";
   amount?: number;
   percentage?: string;
   isPositive?: boolean;
+  concept?: string;
+  loading?: boolean;
 }
 
 const MainCard = ({
@@ -19,13 +21,17 @@ const MainCard = ({
   amount = 0,
   percentage = "+0.0%",
   isPositive = true,
+  concept,
+  loading = false,
 }: BalanceCardProps) => {
   const title =
     type === "balance"
       ? "Balance Total"
       : type === "gastos"
         ? "Gastos"
-        : "Ingresos";
+        : type === "ingresos"
+          ? "Ingresos"
+          : "Gasto Más Alto";
 
   const trendColor = isPositive ? "#48bb78" : "#f56565";
 
@@ -54,7 +60,7 @@ const MainCard = ({
           alignItems: "flex-start",
         }}
       >
-        <Stack spacing={1.5}>
+        <Stack spacing={1.5} sx={{ flexGrow: 1 }}>
           <Typography
             variant="caption"
             sx={{
@@ -76,33 +82,57 @@ const MainCard = ({
               letterSpacing: "-0.02em",
             }}
           >
-            ${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </Typography>
-          <Stack
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-            spacing={0.5}
-          >
-            {isPositive ? (
-              <TrendingUpIcon sx={{ fontSize: 16, color: trendColor }} />
+            {loading ? (
+              <Skeleton width="80%" />
             ) : (
-              <TrendingDownIcon sx={{ fontSize: 16, color: trendColor }} />
+              `$${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
             )}
+          </Typography>
+          {loading ? (
+            <Skeleton width="60%" height={20} />
+          ) : type !== "gasto_max" ? (
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+              spacing={0.5}
+            >
+              {isPositive ? (
+                <TrendingUpIcon sx={{ fontSize: 16, color: trendColor }} />
+              ) : (
+                <TrendingDownIcon sx={{ fontSize: 16, color: trendColor }} />
+              )}
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 600,
+                  color: trendColor,
+                  fontSize: "0.85rem",
+                }}
+              >
+                {percentage} desde el mes pasado
+              </Typography>
+            </Stack>
+          ) : (
             <Typography
               variant="body2"
               sx={{
                 fontWeight: 600,
-                color: trendColor,
+                color: "text.secondary",
                 fontSize: "0.85rem",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                maxWidth: "200px",
               }}
+              title={concept}
             >
-              {percentage} desde el mes pasado
+              {concept || "Sin gastos registrados"}
             </Typography>
-          </Stack>
+          )}
         </Stack>
         <Box
           sx={{
@@ -111,18 +141,35 @@ const MainCard = ({
             justifyContent: "center",
             p: 1.2,
             borderRadius: type === "balance" ? 2 : 5,
-            bgcolor: type === "balance" ? "transparent" : type === "gastos" ? "#ffcdcdff" : "#c9ebffff",
+            bgcolor:
+              type === "balance"
+                ? "transparent"
+                : type === "gastos"
+                  ? "#ffcdcdff"
+                  : type === "gasto_max"
+                    ? "#fff3cd"
+                    : "#c9ebffff",
             border: "1.5px solid rgba(255, 255, 255, 0.2)",
-            color: type === "balance" ? "#ffffff" : type === "gastos" ? "#ff2d2dff" : "#00457aff",
+            color:
+              type === "balance"
+                ? "#ffffff"
+                : type === "gastos"
+                  ? "#ff2d2dff"
+                  : type === "gasto_max"
+                    ? "#856404"
+                    : "#00457aff",
             opacity: 0.9,
+            flexShrink: 0,
           }}
         >
           {type === "balance" ? (
             <AccountBalanceWalletIcon sx={{ fontSize: 20 }} />
           ) : type === "ingresos" ? (
             <ArrowDownwardIcon sx={{ fontSize: 20 }} />
-          ) : (
+          ) : type === "gastos" ? (
             <ArrowUpwardIcon sx={{ fontSize: 20 }} />
+          ) : (
+            <TrendingDownIcon sx={{ fontSize: 20 }} />
           )}
         </Box>
       </Stack>

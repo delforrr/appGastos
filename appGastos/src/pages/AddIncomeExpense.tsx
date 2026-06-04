@@ -11,25 +11,32 @@ import {
   InputLabel,
   MenuItem,
   Button,
+  Alert,
+  Skeleton,
 } from "@mui/material";
 import {
   Close as CloseIcon,
   AttachMoney as AttachMoneyIcon,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   getCategorias,
   type Categoria,
   createMovimiento,
+  getMovimientoById,
+  updateMovimiento,
 } from "../services/movimientosService";
 
 interface Props {
-  type: "ingreso" | "gasto";
+  type?: "ingreso" | "gasto";
 }
 
-const AddIncomeExpense = ({ type }: Props) => {
+const AddIncomeExpense = ({ type = "gasto" }: Props) => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+
+  const [currentType, setCurrentType] = useState<"ingreso" | "gasto">(type);
   const [amount, setAmount] = useState<string>("0.00");
   const [description, setDescription] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -37,9 +44,11 @@ const AddIncomeExpense = ({ type }: Props) => {
     new Date().toISOString().split("T")[0],
   );
   const [categories, setCategories] = useState<Categoria[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const filteredCategories = categories.filter(
-    (cat) => cat.tipoCategoria === type,
+    (cat) => cat.tipoCategoria === currentType,
   );
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,37 +60,113 @@ const AddIncomeExpense = ({ type }: Props) => {
       return;
     }
 
-    // Limite de 11 dígitos
     const limitedDigits = digits.slice(0, 11);
     const parsedValue = parseInt(limitedDigits, 10) / 100;
     setAmount(parsedValue.toFixed(2));
   };
 
-  const handleSubmit = async ({ type }: { type: "ingreso" | "gasto" }) => {
+  const handleSubmit = async () => {
+    setError(null);
+    if (!description.trim()) {
+      setError("Por favor, ingrese una descripción.");
+      return;
+    }
+    if (!selectedCategory) {
+      setError("Por favor, seleccione una categoría.");
+      return;
+    }
+    if (parseFloat(amount) <= 0) {
+      setError("Por favor, ingrese un monto válido mayor a 0.");
+      return;
+    }
+
     try {
-      // Parse date locally to prevent timezone shifting
       const [year, month, day] = date.split("-").map(Number);
       const localDate = new Date(year, month - 1, day);
 
-      const response = await createMovimiento({
-        concepto: description,
-        categoria: selectedCategory,
-        monto: parseFloat(amount),
-        fecha: localDate,
-        tipo: type,
-      });
-      console.log("Movimiento creado:", response);
+      if (id) {
+        await updateMovimiento({
+          id,
+          concepto: description,
+          categoriaId: selectedCategory,
+          monto: parseFloat(amount),
+          fecha: localDate,
+          tipo: currentType,
+        });
+      } else {
+        await createMovimiento({
+          concepto: description,
+          categoriaId: selectedCategory,
+          monto: parseFloat(amount),
+          fecha: localDate,
+          tipo: currentType,
+        });
+      }
       navigate("/");
-    } catch (error) {
-      console.error("Error al crear el movimiento:", error);
+    } catch (err) {
+      console.error("Error al guardar el movimiento:", err);
+      setError(
+        "No se pudo guardar el movimiento. Verifique la conexión con el servidor.",
+      );
     }
   };
 
   useEffect(() => {
-    getCategorias().then((categories) => {
-      setCategories(categories);
-    });
-  }, []);
+    const loadData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const cats = await getCategorias();
+        setCategories(cats);
+
+        if (id) {
+          const mov = await getMovimientoById(id);
+          setCurrentType(mov.tipo as "ingreso" | "gasto");
+          setAmount(mov.monto.toFixed(2));
+          setDescription(mov.concepto);
+          setSelectedCategory(String(mov.categoriaId));
+          const movDate = new Date(mov.fecha);
+          const formattedDate = movDate.toISOString().split("T")[0];
+          setDate(formattedDate);
+        }
+      } catch (err) {
+        console.error("Error al cargar datos:", err);
+        setError(
+          "Error al obtener los datos del servidor. Verifique su conexión de red.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, [id]);
+
+  if (loading && id) {
+    return (
+      <Container maxWidth="md" sx={{ bgcolor: "background.paper", p: 5 }}>
+        <Stack spacing={4}>
+          <Skeleton variant="text" width="40%" height={50} />
+          <Divider />
+          <Skeleton variant="text" width="20%" />
+          <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+            <Skeleton variant="circular" width={40} height={40} />
+            <Skeleton variant="rectangular" width="40%" height={40} />
+          </Stack>
+          <Skeleton variant="rectangular" width="100%" height={56} />
+          <Stack direction="row" spacing={2}>
+            <Skeleton variant="rectangular" width="50%" height={56} />
+            <Skeleton variant="rectangular" width="50%" height={56} />
+          </Stack>
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={60}
+            sx={{ mt: 5 }}
+          />
+        </Stack>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="md" sx={{ bgcolor: "background.paper", p: 5 }}>
@@ -91,13 +176,16 @@ const AddIncomeExpense = ({ type }: Props) => {
       >
         <Box>
           <Typography variant="h2" sx={{ fontWeight: 700 }}>
-            Agregar {type === "ingreso" ? "Ingreso" : "Gasto"}
+            {id ? "Editar" : "Agregar"}{" "}
+            {currentType === "ingreso" ? "Ingreso" : "Gasto"}
           </Typography>
-          <Typography // Limit to 11 digits to prevent integer overflow
+          <Typography
             variant="body1"
             sx={{ fontSize: 14, mb: 2, color: "text.secondary" }}
           >
-            Ingresa los datos del movimiento
+            {id
+              ? "Modifica los datos del movimiento existente"
+              : "Ingresa los datos del nuevo movimiento"}
           </Typography>
         </Box>
 
@@ -107,6 +195,12 @@ const AddIncomeExpense = ({ type }: Props) => {
       </Stack>
 
       <Divider sx={{ mb: 5 }} />
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       <Typography variant="body1" sx={{ fontWeight: 600, pl: 2 }}>
         Monto
@@ -174,7 +268,7 @@ const AddIncomeExpense = ({ type }: Props) => {
               <em>Seleccionar categoría</em>
             </MenuItem>
             {filteredCategories.map((categoria) => (
-              <MenuItem key={categoria.id} value={categoria.nombre}>
+              <MenuItem key={categoria.id} value={String(categoria.id)}>
                 {categoria.nombre}
               </MenuItem>
             ))}
@@ -205,7 +299,7 @@ const AddIncomeExpense = ({ type }: Props) => {
           }}
           onClick={() => navigate("/")}
         >
-          Mover al Borrador
+          Cancelar
         </Button>
         <Button
           variant="contained"
@@ -217,11 +311,9 @@ const AddIncomeExpense = ({ type }: Props) => {
             fontWeight: 600,
             letterSpacing: "1px",
           }}
-          onClick={() => {
-            handleSubmit({ type });
-          }}
+          onClick={handleSubmit}
         >
-          Guardar Movimiento
+          {id ? "Guardar Cambios" : "Guardar Movimiento"}
         </Button>
       </Box>
     </Container>

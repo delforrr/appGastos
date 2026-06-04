@@ -64,7 +64,7 @@
       "id": "1",
       "concepto": "Supermercado mensual",
       "monto": 85000,
-      "categoria": "Comida",
+      "categoriaId": "1",
       "fecha": "2026-06-01",
       "tipo": "gasto"
     },
@@ -72,7 +72,7 @@
       "id": "2",
       "concepto": "Suscripción Netflix",
       "monto": 7200,
-      "categoria": "Entretenimiento",
+      "categoriaId": "4",
       "fecha": "2026-06-02",
       "tipo": "gasto"
     },
@@ -80,7 +80,7 @@
       "id": "3",
       "concepto": "Carga de combustible",
       "monto": 25000,
-      "categoria": "Transporte",
+      "categoriaId": "2",
       "fecha": "2026-05-28",
       "tipo": "gasto"
     },
@@ -88,7 +88,7 @@
       "id": "4",
       "concepto": "Factura de Luz",
       "monto": 18400,
-      "categoria": "Servicios",
+      "categoriaId": "3",
       "fecha": "2026-05-15",
       "tipo": "gasto"
     },
@@ -96,7 +96,7 @@
       "id": "5",
       "concepto": "Compra en Librería",
       "monto": 4500,
-      "categoria": "Material de Estudio",
+      "categoriaId": "5",
       "fecha": "2026-06-03",
       "tipo": "gasto"
     },
@@ -104,7 +104,7 @@
       "id": "6",
       "concepto": "Cena con amigos",
       "monto": 9800,
-      "categoria": "Entretenimiento",
+      "categoriaId": "4",
       "fecha": "2026-06-04",
       "tipo": "gasto"
     },
@@ -112,7 +112,7 @@
       "id": "7",
       "concepto": "Spotify",
       "monto": 4300,
-      "categoria": "Entretenimiento",
+      "categoriaId": "4",
       "fecha": "2026-06-01",
       "tipo": "gasto"
     },
@@ -120,13 +120,13 @@
       "id": "9",
       "concepto": "Venta de remeras",
       "monto": 35000,
-      "categoria": "Venta",
+      "categoriaId": "7",
       "fecha": "2026-06-03",
       "tipo": "ingreso"
     },
     {
       "concepto": "Carniceria",
-      "categoria": "Comida",
+      "categoriaId": "1",
       "monto": 14000,
       "fecha": "2026-06-04T03:00:00.000Z",
       "tipo": "gasto",
@@ -134,7 +134,7 @@
     },
     {
       "concepto": "Sueldo mensual",
-      "categoria": "Sueldo",
+      "categoriaId": "6",
       "monto": 500000,
       "fecha": "2026-06-04T03:00:00.000Z",
       "tipo": "ingreso",

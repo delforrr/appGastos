@@ -3,14 +3,14 @@ import axios from "axios";
 export interface Movimiento {
   id: number | string;
   concepto: string;
-  categoria: string;
+  categoriaId: number | string;
   monto: number;
   fecha: Date;
   tipo: string;
 }
 
 export interface Categoria {
-  id: number;
+  id: number | string;
   nombre: string;
   descripcion: string;
   tipoCategoria: string;
