@@ -11,17 +11,25 @@ import {
   Button,
   Box,
   Chip,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
-import {
-  type Movimiento,
-} from "../services/movimientosService";
+import { type Movimiento } from "../services/movimientosService";
 import { Link } from "react-router-dom";
 import { getCategoryChipStyles } from "../utils/categoryColors";
+import { useState } from "react";
 
 interface MovementsProps {
   isRecent: boolean;
   movimientos: Movimiento[];
+  canDelete?: boolean;
+  onDelete?: (id: string | number) => void;
 }
 
 const tableHeadeCells = [
@@ -29,10 +37,35 @@ const tableHeadeCells = [
   { id: "Detalle", label: "Detalle", align: "left" },
   { id: "Categoría", label: "Categoría", align: "left" },
   { id: "Monto", label: "Monto", align: "right" },
+  { id: "Acciones", label: "Acciones", align: "right" },
 ] as const;
 
-const Movements = ({ isRecent, movimientos }: MovementsProps) => {
+const Movements = ({ isRecent, movimientos, canDelete, onDelete }: MovementsProps) => {
   const theme = useTheme();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | number | null>(null);
+
+  const headers = canDelete
+    ? tableHeadeCells
+    : tableHeadeCells.filter((cell) => cell.id !== "Acciones");
+
+  const handleDeleteClick = (id: string | number) => {
+    setSelectedId(id);
+    setOpenDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedId !== null) {
+      onDelete?.(selectedId);
+      setOpenDialog(false);
+      setSelectedId(null);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedId(null);
+  };
 
   const sortedMovimientos = movimientos.toSorted((a, b) => {
     const dateA = new Date(a.fecha);
@@ -90,7 +123,7 @@ const Movements = ({ isRecent, movimientos }: MovementsProps) => {
             }}
           >
             <TableRow>
-              {tableHeadeCells.map((headCell) => (
+              {headers.map((headCell) => (
                 <TableCell
                   key={headCell.id}
                   sx={{
@@ -146,11 +179,53 @@ const Movements = ({ isRecent, movimientos }: MovementsProps) => {
                 >
                   ${movimiento.monto.toFixed(2)}
                 </TableCell>
+                {canDelete && (
+                  <TableCell align="right">
+                    <IconButton
+                      onClick={() => handleDeleteClick(movimiento.id)}
+                      sx={{ color: "error.main" }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: 5,
+              p: 2,
+            }
+          }
+        }}
+      >
+        <DialogTitle id="delete-dialog-title">
+          <Typography sx={{ fontWeight: 700, fontSize: 20 }}>¿Confirmar eliminación?</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            ¿Estás seguro de que deseas eliminar este movimiento? Esta acción no se puede deshacer.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleConfirmDelete} color="error" autoFocus>
+            Eliminar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

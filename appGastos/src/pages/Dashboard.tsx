@@ -1,21 +1,10 @@
 import { Box, Typography, Grid } from "@mui/material";
 import MainCard from "../components/MainCard";
 import RecentTransactions from "../components/Movements";
-import { useEffect, useState } from "react";
-import {
-  getMovimientos,
-  type Movimiento,
-} from "../services/movimientosService";
+import useMovements from "../hooks/useMovements";
 
 const Dashboard = () => {
-  // Esto va al backend
-  const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
-
-  useEffect(() => {
-    getMovimientos().then((data) => {
-      setMovimientos(data);
-    });
-  }, []);
+  const { movimientos } = useMovements();
 
   const totalIngresos = movimientos
     .filter((m) => m.tipo === "ingreso")

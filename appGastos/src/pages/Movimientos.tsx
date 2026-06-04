@@ -1,20 +1,18 @@
 import { Box } from "@mui/material";
 import Movements from "../components/Movements";
-import { useEffect, useState } from "react";
-import { getMovimientos, type Movimiento } from "../services/movimientosService";
+import useMovements from "../hooks/useMovements";
 
 const Movimientos = () => {
-  const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
-
-  useEffect(() => {
-    getMovimientos().then((data) => {
-      setMovimientos(data);
-    });
-  }, []);
+  const { movimientos, handleDelete } = useMovements();
 
   return (
     <Box>
-      <Movements isRecent={false} movimientos={movimientos} />
+      <Movements
+        isRecent={false}
+        movimientos={movimientos}
+        canDelete
+        onDelete={handleDelete}
+      />
     </Box>
   );
 };

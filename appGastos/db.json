@@ -117,36 +117,12 @@
       "tipo": "gasto"
     },
     {
-      "id": "8",
-      "concepto": "Sueldo mensual",
-      "monto": 250000,
-      "categoria": "Sueldo",
-      "fecha": "2026-06-05",
-      "tipo": "ingreso"
-    },
-    {
       "id": "9",
       "concepto": "Venta de remeras",
       "monto": 35000,
       "categoria": "Venta",
       "fecha": "2026-06-03",
       "tipo": "ingreso"
-    },
-    {
-      "concepto": "Test POST",
-      "categoria": "Comida",
-      "monto": 1500,
-      "fecha": "2026-06-04",
-      "tipo": "gasto",
-      "id": "2Qqox0of8XI"
-    },
-    {
-      "concepto": "Gimnasio Argentino",
-      "categoria": "Otros",
-      "monto": 35000,
-      "fecha": "2026-06-04T03:00:00.000Z",
-      "tipo": "gasto",
-      "id": "YpLS3gb-JMs"
     },
     {
       "concepto": "Carniceria",
@@ -157,12 +133,12 @@
       "id": "3dQQPbkCFyo"
     },
     {
-      "concepto": "Transferencia de Juan",
-      "categoria": "Ayuda económica",
-      "monto": 10000,
+      "concepto": "Sueldo mensual",
+      "categoria": "Sueldo",
+      "monto": 500000,
       "fecha": "2026-06-04T03:00:00.000Z",
       "tipo": "ingreso",
-      "id": "mlEFzUyKr7g"
+      "id": "YxVssRz72co"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
