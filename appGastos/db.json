@@ -1,39 +1,145 @@
 {
-  "gastos": [
+  "tiposMovimientos": [
+    {
+      "id": "1",
+      "nombre": "Ingreso"
+    },
+    {
+      "id": "2",
+      "nombre": "Egreso"
+    }
+  ],
+  "categorias": [
+    {
+      "id": "1",
+      "nombre": "Comida",
+      "descripcion": "Compras de supermercado y comida rápida",
+      "tipoCategoria": "gasto"
+    },
+    {
+      "id": "2",
+      "nombre": "Transporte",
+      "descripcion": "Subte, colectivos, taxi y combustible",
+      "tipoCategoria": "gasto"
+    },
+    {
+      "id": "3",
+      "nombre": "Servicios",
+      "descripcion": "Luz, gas, internet, agua, etc.",
+      "tipoCategoria": "gasto"
+    },
+    {
+      "id": "4",
+      "nombre": "Entretenimiento",
+      "descripcion": "Salidas, cine, suscripciones online",
+      "tipoCategoria": "gasto"
+    },
+    {
+      "id": "5",
+      "nombre": "Otros",
+      "descripcion": "Gastos generales varios",
+      "tipoCategoria": "gasto"
+    },
+    {
+      "id": "6",
+      "nombre": "Sueldo",
+      "descripcion": "Sueldo mensual",
+      "tipoCategoria": "ingreso"
+    },
+    {
+      "id": "7",
+      "nombre": "Venta",
+      "descripcion": "Venta de productos",
+      "tipoCategoria": "ingreso"
+    },
+    {
+      "id": "8",
+      "nombre": "Ayuda económica",
+      "descripcion": "Ayuda económica de familiares",
+      "tipoCategoria": "ingreso"
+    }
+  ],
+  "movimientos": [
     {
       "id": "1",
       "concepto": "Supermercado mensual",
       "monto": 85000,
-      "categoria": "Comida",
-      "fecha": "2026-06-01"
+      "categoriaId": "1",
+      "fecha": "2026-06-01",
+      "tipo": "gasto"
     },
     {
       "id": "2",
       "concepto": "Suscripción Netflix",
       "monto": 7200,
-      "categoria": "Entretenimiento",
-      "fecha": "2026-06-02"
+      "categoriaId": "4",
+      "fecha": "2026-06-02",
+      "tipo": "gasto"
     },
     {
       "id": "3",
       "concepto": "Carga de combustible",
       "monto": 25000,
-      "categoria": "Transporte",
-      "fecha": "2026-05-28"
+      "categoriaId": "2",
+      "fecha": "2026-05-28",
+      "tipo": "gasto"
     },
     {
       "id": "4",
       "concepto": "Factura de Luz",
       "monto": 18400,
-      "categoria": "Servicios",
-      "fecha": "2026-05-15"
+      "categoriaId": "3",
+      "fecha": "2026-05-15",
+      "tipo": "gasto"
+    },
+    {
+      "id": "5",
+      "concepto": "Compra en Librería",
+      "monto": 4500,
+      "categoriaId": "5",
+      "fecha": "2026-06-03",
+      "tipo": "gasto"
+    },
+    {
+      "id": "6",
+      "concepto": "Cena con amigos",
+      "monto": 9800,
+      "categoriaId": "4",
+      "fecha": "2026-06-04",
+      "tipo": "gasto"
+    },
+    {
+      "id": "7",
+      "concepto": "Spotify",
+      "monto": 4300,
+      "categoriaId": "4",
+      "fecha": "2026-06-01",
+      "tipo": "gasto"
+    },
+    {
+      "id": "9",
+      "concepto": "Venta de remeras",
+      "monto": 35000,
+      "categoriaId": "7",
+      "fecha": "2026-06-03",
+      "tipo": "ingreso"
+    },
+    {
+      "concepto": "Carniceria",
+      "categoriaId": "1",
+      "monto": 14000,
+      "fecha": "2026-06-04T03:00:00.000Z",
+      "tipo": "gasto",
+      "id": "3dQQPbkCFyo"
+    },
+    {
+      "concepto": "Sueldo mensual",
+      "categoriaId": "6",
+      "monto": 500000,
+      "fecha": "2026-06-04T03:00:00.000Z",
+      "tipo": "ingreso",
+      "id": "YxVssRz72co"
     }
   ],
-  "categorias": [
-    "Comida",
-    "Transporte",
-    "Servicios",
-    "Entretenimiento",
-    "Otros"
-  ]
+  "$schema": "./node_modules/json-server/schema.json"
 }

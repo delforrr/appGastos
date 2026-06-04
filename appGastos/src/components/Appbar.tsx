@@ -7,22 +7,22 @@ interface AppbarProps {
     onDrawerToggle: () => void;
 }
 
+const getTitle = (path: string) => {
+    switch (path) {
+        case "/":
+            return "Dashboard";
+        case "/gastos":
+            return "Mis Gastos";
+        case "/categorias":
+            return "Categorías";
+        default:
+            return "FinTrack";
+    }
+};
+
 const Appbar = ({ onDrawerToggle }: AppbarProps) => {
     const location = useLocation();
     const { mode, toggleColorMode } = useColorMode();
-
-    const getTitle = (path: string) => {
-        switch (path) {
-            case "/":
-                return "Dashboard";
-            case "/gastos":
-                return "Mis Gastos";
-            case "/categorias":
-                return "Categorías";
-            default:
-                return "FinTrack";
-        }
-    };
 
     return (
         <AppBar position="static" elevation={0} sx={{ backgroundColor: "background.default", color: "text.primary", borderBottom: "1px solid", borderColor: "outline.variant" }}>

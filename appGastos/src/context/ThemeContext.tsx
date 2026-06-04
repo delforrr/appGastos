@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import React, { createContext, use, useState, useMemo } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { getDesignTokens } from './theme.js';
+import { getDesignTokens } from './theme';
 
 interface ThemeContextType {
   mode: 'light' | 'dark';
@@ -13,7 +13,7 @@ const ThemeContext = createContext<ThemeContextType>({
   toggleColorMode: () => {},
 });
 
-export const useColorMode = () => useContext(ThemeContext);
+export const useColorMode = () => use(ThemeContext);
 
 export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
