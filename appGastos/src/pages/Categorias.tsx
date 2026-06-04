@@ -13,6 +13,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { getCategoryColor } from "../utils/categoryColors";
 import useMovements from "../hooks/useMovements";
+import { type Categoria } from "../services/movimientosService";
 import Movements from "../components/Movements";
 
 const Categorias = () => {
@@ -28,11 +29,13 @@ const Categorias = () => {
   >(null);
   const theme = useTheme();
 
-  const getTotalSpentForCategory = (categoryId: string | number) => {
+  const getCategoryTotal = (category: Categoria) => {
+    const isIngreso = category.tipoCategoria === "ingreso";
     return movimientos
       .filter(
         (m) =>
-          m.tipo === "gasto" && String(m.categoriaId) === String(categoryId),
+          m.tipo === (isIngreso ? "ingreso" : "gasto") &&
+          String(m.categoriaId) === String(category.id),
       )
       .reduce((sum, m) => sum + m.monto, 0);
   };
@@ -107,8 +110,9 @@ const Categorias = () => {
               ))
             : categories.map((category) => {
                 const catColor = getCategoryColor(category.nombre);
-                const totalSpent = getTotalSpentForCategory(category.id);
+                const totalAmount = getCategoryTotal(category);
                 const isSelected = selectedCategoryId === category.id;
+                const isIngreso = category.tipoCategoria === "ingreso";
 
                 return (
                   <ListItem
@@ -158,16 +162,19 @@ const Categorias = () => {
                     <Box sx={{ ml: "auto", textAlign: "right", pl: 2 }}>
                       <Typography
                         variant="h5"
-                        sx={{ fontWeight: 700, color: "text.primary" }}
+                        sx={{
+                          fontWeight: 700,
+                          color: isIngreso ? "success.dark" : "text.primary",
+                        }}
                       >
                         $
-                        {totalSpent.toLocaleString("es-AR", {
+                        {totalAmount.toLocaleString("es-AR", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
                         })}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        Total Gastado
+                        {isIngreso ? "Total Ingresado" : "Total Gastado"}
                       </Typography>
                     </Box>
                   </ListItem>
