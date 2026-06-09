@@ -63,6 +63,11 @@ export const getTiposMovimientos = async (): Promise<TipoMovimiento[]> => {
   return response.data;
 };
 
+export const getTipoMovimientoById = async (id: number): Promise<TipoMovimiento> => {
+  const response = await api.get<TipoMovimiento>(`/tiposMovimientos/${id}`);
+  return response.data;
+};
+
 // Categorias
 
 export const getCategoriaById = async (id: number): Promise<Categoria> => {
@@ -75,16 +80,16 @@ export const getCategorias = async (): Promise<Categoria[]> => {
   return response.data;
 };
 
-// export const createCategoria = async (categoria: Categoria): Promise<Categoria> => {
-//   const response = await api.post<Categoria>("/categorias", categoria);
-//   return response.data;
-// };
+export const createCategoria = async (categoria: Categoria): Promise<Categoria> => {
+  const response = await api.post<Categoria>("/categorias", categoria);
+  return response.data;
+};
 
-// export const deleteCategoria = async (id: number): Promise<void> => {
-//   await api.delete(`/categorias/${id}`);
-// };
+export const deleteCategoria = async (id: number): Promise<void> => {
+  await api.delete(`/categorias/${id}`);
+};
 
-// export const updateCategoria = async (categoria: Categoria): Promise<Categoria> => {
-//   const response = await api.put<Categoria>(`/categorias/${categoria.id}`, categoria);
-//   return response.data;
-// };
+export const updateCategoria = async (categoria: Categoria): Promise<Categoria> => {
+  const response = await api.put<Categoria>(`/categorias/${categoria.id}`, categoria);
+  return response.data;
+};
