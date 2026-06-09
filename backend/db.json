@@ -125,21 +125,20 @@
       "tipo": "ingreso"
     },
     {
+      "id": "3dQQPbkCFyo",
       "concepto": "Carniceria",
       "categoriaId": "1",
       "monto": 14000,
       "fecha": "2026-06-04T03:00:00.000Z",
-      "tipo": "gasto",
-      "id": "3dQQPbkCFyo"
+      "tipo": "gasto"
     },
     {
+      "id": "YxVssRz72co",
       "concepto": "Sueldo mensual",
       "categoriaId": "6",
       "monto": 500000,
       "fecha": "2026-06-04T03:00:00.000Z",
-      "tipo": "ingreso",
-      "id": "YxVssRz72co"
+      "tipo": "ingreso"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }
