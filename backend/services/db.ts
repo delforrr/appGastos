@@ -14,22 +14,41 @@ export interface DatabaseSchema {
   movimientos: Movimiento[];
 }
 
-// Maneja el mockup de bd escribiendo en db.json
+let dbQueue: Promise<any> = Promise.resolve();
+
+const queueTask = <T>(task: () => Promise<T>): Promise<T> => {
+  return new Promise((resolve, reject) => {
+    dbQueue = dbQueue.then(async () => {
+      try {
+        const result = await task();
+        resolve(result);
+      } catch (err) {
+        reject(err);
+      }
+    }).catch(() => {});
+  });
+};
+
+// Maneja el mockup de bd escribiendo en db.json de forma secuencial
 export async function readDb(): Promise<DatabaseSchema> {
-  try {
-    const data = await fs.readFile(DB_PATH, "utf-8");
-    return JSON.parse(data) as DatabaseSchema;
-  } catch (error) {
-    console.error("Error reading database file:", error);
-    return { tiposMovimientos: [], categorias: [], movimientos: [] };
-  }
+  return queueTask(async () => {
+    try {
+      const data = await fs.readFile(DB_PATH, "utf-8");
+      return JSON.parse(data) as DatabaseSchema;
+    } catch (error) {
+      console.error("Error reading database file, returning empty schema:", error);
+      return { tiposMovimientos: [], categorias: [], movimientos: [] };
+    }
+  });
 }
 
 export async function writeDb(data: DatabaseSchema): Promise<void> {
-  try {
-    await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
-  } catch (error) {
-    console.error("Error writing to database file:", error);
-    throw error;
-  }
+  return queueTask(async () => {
+    try {
+      await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
+    } catch (error) {
+      console.error("Error writing to database file:", error);
+      throw error;
+    }
+  });
 }
