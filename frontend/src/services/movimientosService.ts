@@ -5,7 +5,7 @@ export interface Movimiento {
   concepto: string;
   categoriaId: number | string;
   monto: number;
-  fecha: Date;
+  fecha: string;
   tipo: string;
 }
 

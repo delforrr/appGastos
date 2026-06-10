@@ -20,13 +20,8 @@ import {
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import {
-  getCategorias,
-  type Categoria,
-  createMovimiento,
-  getMovimientoById,
-  updateMovimiento,
-} from "../services/movimientosService";
+import useMovements from "../hooks/useMovements";
+import { getMovimientoById } from "../services/movimientosService";
 
 interface Props {
   type?: "ingreso" | "gasto";
@@ -35,6 +30,7 @@ interface Props {
 const AddIncomeExpense = ({ type = "gasto" }: Props) => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { handleCreate, handleUpdate, categorias } = useMovements();
 
   const [currentType, setCurrentType] = useState<"ingreso" | "gasto">(type);
   const [amount, setAmount] = useState<string>("0.00");
@@ -43,11 +39,10 @@ const AddIncomeExpense = ({ type = "gasto" }: Props) => {
   const [date, setDate] = useState<string>(
     new Date().toISOString().split("T")[0],
   );
-  const [categories, setCategories] = useState<Categoria[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const filteredCategories = categories.filter(
+  const filteredCategories = categorias.filter(
     (cat) => cat.tipoCategoria === currentType,
   );
 
@@ -81,24 +76,21 @@ const AddIncomeExpense = ({ type = "gasto" }: Props) => {
     }
 
     try {
-      const [year, month, day] = date.split("-").map(Number);
-      const localDate = new Date(year, month - 1, day);
-
       if (id) {
-        await updateMovimiento({
+        await handleUpdate({
           id,
           concepto: description,
           categoriaId: selectedCategory,
           monto: parseFloat(amount),
-          fecha: localDate,
+          fecha: date,
           tipo: currentType,
         });
       } else {
-        await createMovimiento({
+        await handleCreate({
           concepto: description,
           categoriaId: selectedCategory,
           monto: parseFloat(amount),
-          fecha: localDate,
+          fecha: date,
           tipo: currentType,
         });
       }
@@ -113,24 +105,19 @@ const AddIncomeExpense = ({ type = "gasto" }: Props) => {
 
   useEffect(() => {
     const loadData = async () => {
+      if (!id) return;
       setLoading(true);
       setError(null);
       try {
-        const cats = await getCategorias();
-        setCategories(cats);
-
-        if (id) {
-          const mov = await getMovimientoById(id);
-          setCurrentType(mov.tipo as "ingreso" | "gasto");
-          setAmount(mov.monto.toFixed(2));
-          setDescription(mov.concepto);
-          setSelectedCategory(String(mov.categoriaId));
-          const movDate = new Date(mov.fecha);
-          const formattedDate = movDate.toISOString().split("T")[0];
-          setDate(formattedDate);
-        }
+        const mov = await getMovimientoById(id);
+        setCurrentType(mov.tipo as "ingreso" | "gasto");
+        setAmount(mov.monto.toFixed(2));
+        setDescription(mov.concepto);
+        setSelectedCategory(String(mov.categoriaId));
+        const formattedDate = String(mov.fecha).split("T")[0];
+        setDate(formattedDate);
       } catch (err) {
-        console.error("Error al cargar datos:", err);
+        console.error("Error al cargar datos del movimiento:", err);
         setError(
           "Error al obtener los datos del servidor. Verifique su conexión de red.",
         );

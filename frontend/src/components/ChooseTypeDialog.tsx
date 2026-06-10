@@ -120,7 +120,7 @@ const ChooseTypeDialog = ({ typeAction, open, onClose }: Props) => {
                     flexShrink: 0,
                   }}
                 >
-                  {isIngreso ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
+                  {isIngreso ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
                 </Box>
                 <ListItemText
                   primary={tipo.nombre}

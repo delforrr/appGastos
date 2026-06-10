@@ -11,8 +11,8 @@ const getTitle = (path: string) => {
     switch (path) {
         case "/":
             return "Dashboard";
-        case "/gastos":
-            return "Mis Gastos";
+        case "/movimientos":
+            return "Mis Movimientos";
         case "/categorias":
             return "Categorías";
         default:

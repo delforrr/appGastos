@@ -1,4 +1,5 @@
 import { Paper, Typography, Box, Stack, Skeleton } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import {
   AccountBalanceWallet as AccountBalanceWalletIcon,
   ArrowUpward as ArrowUpwardIcon,
@@ -24,6 +25,7 @@ const MainCard = ({
   concept,
   loading = false,
 }: BalanceCardProps) => {
+  const theme = useTheme();
   const title =
     type === "balance"
       ? "Balance Total"
@@ -34,6 +36,22 @@ const MainCard = ({
           : "Gasto Más Alto";
 
   const trendColor = isPositive ? "#48bb78" : "#f56565";
+
+  const isLight = theme.palette.mode === "light";
+
+  const getIconBgColor = () => {
+    if (type === "balance") return "transparent";
+    if (type === "gastos") return isLight ? "#ffcdcdff" : "rgba(255, 180, 171, 0.15)";
+    if (type === "gasto_max") return isLight ? "#fff3cd" : "rgba(255, 178, 190, 0.15)";
+    return isLight ? "#c9ebffff" : "rgba(78, 242, 178, 0.15)";
+  };
+
+  const getIconColor = () => {
+    if (type === "balance") return "#ffffff";
+    if (type === "gastos") return isLight ? "#ff2d2dff" : "#ffb4ab";
+    if (type === "gasto_max") return isLight ? "#856404" : "#ffb2be";
+    return isLight ? "#00457aff" : "#4ef2b2";
+  };
 
   return (
     <Paper
@@ -141,23 +159,9 @@ const MainCard = ({
             justifyContent: "center",
             p: 1.2,
             borderRadius: type === "balance" ? 2 : 5,
-            bgcolor:
-              type === "balance"
-                ? "transparent"
-                : type === "gastos"
-                  ? "#ffcdcdff"
-                  : type === "gasto_max"
-                    ? "#fff3cd"
-                    : "#c9ebffff",
+            bgcolor: getIconBgColor(),
             border: "1.5px solid rgba(255, 255, 255, 0.2)",
-            color:
-              type === "balance"
-                ? "#ffffff"
-                : type === "gastos"
-                  ? "#ff2d2dff"
-                  : type === "gasto_max"
-                    ? "#856404"
-                    : "#00457aff",
+            color: getIconColor(),
             opacity: 0.9,
             flexShrink: 0,
           }}

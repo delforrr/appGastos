@@ -128,8 +128,8 @@
       "id": "3dQQPbkCFyo",
       "concepto": "Carniceria",
       "categoriaId": "1",
-      "monto": 14000,
-      "fecha": "2026-06-04T03:00:00.000Z",
+      "monto": 15000,
+      "fecha": "2026-06-04",
       "tipo": "gasto"
     },
     {
@@ -137,8 +137,16 @@
       "concepto": "Sueldo mensual",
       "categoriaId": "6",
       "monto": 500000,
-      "fecha": "2026-06-04T03:00:00.000Z",
+      "fecha": "2026-06-04",
       "tipo": "ingreso"
+    },
+    {
+      "concepto": "Beca facultad",
+      "categoriaId": "8",
+      "monto": 50000,
+      "fecha": "2026-06-09",
+      "tipo": "ingreso",
+      "id": "RfMUdiNd"
     }
   ]
 }

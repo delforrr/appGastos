@@ -20,8 +20,8 @@ function App() {
     <Box sx={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar mobileOpen={mobileOpen} onClose={handleDrawerToggle} />
       <Box
+        component="main"
         sx={{
-          component: "main",
           flexGrow: 1,
           display: "flex",
           flexDirection: "column",

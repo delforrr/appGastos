@@ -12,7 +12,7 @@ export const getMovimientoById = async (
   id: string,
 ): Promise<Movimiento | undefined> => {
   const db = await readDb();
-  return db.movimientos.find((m) => m.id === id);
+  return db.movimientos.find((m) => String(m.id) === String(id));
 };
 
 export const createMovimiento = async (
@@ -28,8 +28,8 @@ export const createMovimiento = async (
   }
 
   const nuevoMovimiento: Movimiento = {
-    id,
     ...movimientoData,
+    id,
   };
 
   db.movimientos.push(nuevoMovimiento);
@@ -41,15 +41,13 @@ const validateMovement = (movement: Omit<Movimiento, "id">): boolean => {
   if (!movement.concepto) return false;
   if (movement.monto <= 0) return false;
   
-  // Robust date parsing and checking
+  // Parseo y validacion de fecha
   const movementDate = new Date(movement.fecha);
   if (isNaN(movementDate.getTime())) return false;
-  // If the date is in the future compared to today, it's invalid
   const today = new Date();
-  today.setHours(23, 59, 59, 999); // allow today
+  today.setHours(23, 59, 59, 999);
   if (movementDate > today) return false;
 
-  // Case-insensitive check supporting gasto, egreso, ingreso
   const tipoLower = movement.tipo?.toLowerCase();
   if (tipoLower !== "ingreso" && tipoLower !== "gasto" && tipoLower !== "egreso") return false;
 
@@ -62,7 +60,7 @@ export const updateMovimiento = async (
   movimientoData: Movimiento,
 ): Promise<Movimiento | null> => {
   const db = await readDb();
-  const index = db.movimientos.findIndex((m) => m.id === id);
+  const index = db.movimientos.findIndex((m) => String(m.id) === String(id));
   if (index === -1) return null;
 
   if (!validateMovement(movimientoData)) {
@@ -77,7 +75,7 @@ export const updateMovimiento = async (
 export const deleteMovimiento = async (id: string): Promise<boolean> => {
   const db = await readDb();
   const initialLength = db.movimientos.length;
-  db.movimientos = db.movimientos.filter((m) => m.id !== id);
+  db.movimientos = db.movimientos.filter((m) => String(m.id) !== String(id));
   if (db.movimientos.length === initialLength) return false;
 
   if (!id) {
