@@ -16,28 +16,19 @@ App Gastos es una aplicación web que permite gestionar gastos personales. Permi
 - JSON Server: Base de datos simulada.
 - Extra: react-doctor para diagnosticar codigo de frontend y utilizar estándares de React.
 
-## Ejecucion
+## Ejecución
 
-Para ejecutar la aplicación se deben seguir los siguientes pasos:
+El proyecto está configurado con **NPM Workspaces**, lo que permite instalar las dependencias y ejecutar ambos servicios (frontend y backend) de forma centralizada.
 
-1. Abrir una terminal en la carpeta "appGastos" e instalar las dependencias
+### Pasos para iniciar:
 
-```bash
-npm install
-```
+1. Instalar todas las dependencias del proyecto (raíz, frontend y backend):
+   ```bash
+   npm install
+   ```
 
-2. Ejecutar la aplicación
+2. Iniciar el entorno de desarrollo (arranca el frontend en `http://localhost:5173` y el backend en `http://localhost:3001` de forma simultánea):
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm run dev
-```
-
-3. Abrir el navegador en la dirección http://localhost:5173
-
-4. Para ejecutar el backend
-
-```bash
-npm run server
-```
-
-5. Abrir el navegador en la dirección http://localhost:3000
