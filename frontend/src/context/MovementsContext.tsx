@@ -1,4 +1,4 @@
-import React, { createContext, use, useState, useEffect, useTransition } from "react";
+import React, { createContext, use, useState, useEffect, useTransition, useCallback, useMemo } from "react";
 import {
   getMovimientos,
   getCategorias,
@@ -38,7 +38,7 @@ export const MovementsContextProvider: React.FC<{ children: React.ReactNode }> =
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const fetchMovimientos = async () => {
+  const fetchMovimientos = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -58,13 +58,13 @@ export const MovementsContextProvider: React.FC<{ children: React.ReactNode }> =
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchMovimientos();
-  }, []);
+  }, [fetchMovimientos]);
 
-  const handleDelete = async (id: string | number) => {
+  const handleDelete = useCallback(async (id: string | number) => {
     try {
       await apiDeleteMovimiento(id);
       startTransition(() => {
@@ -75,9 +75,9 @@ export const MovementsContextProvider: React.FC<{ children: React.ReactNode }> =
       setError("No se pudo eliminar el movimiento. Verifique su conexión de red.");
       throw err;
     }
-  };
+  }, []);
 
-  const handleCreate = async (movimientoData: Omit<Movimiento, "id">): Promise<Movimiento> => {
+  const handleCreate = useCallback(async (movimientoData: Omit<Movimiento, "id">): Promise<Movimiento> => {
     try {
       const newMov = await apiCreateMovimiento(movimientoData);
       startTransition(() => {
@@ -89,9 +89,9 @@ export const MovementsContextProvider: React.FC<{ children: React.ReactNode }> =
       setError("No se pudo crear el movimiento. Verifique su conexión de red.");
       throw err;
     }
-  };
+  }, []);
 
-  const handleUpdate = async (movimientoData: Movimiento): Promise<Movimiento> => {
+  const handleUpdate = useCallback(async (movimientoData: Movimiento): Promise<Movimiento> => {
     try {
       const updatedMov = await apiUpdateMovimiento(movimientoData);
       startTransition(() => {
@@ -105,22 +105,32 @@ export const MovementsContextProvider: React.FC<{ children: React.ReactNode }> =
       setError("No se pudo actualizar el movimiento. Verifique su conexión de red.");
       throw err;
     }
-  };
+  }, []);
+
+  const contextValue = useMemo(() => ({
+    movimientos,
+    categorias,
+    loading: loading || isPending,
+    error,
+    setError,
+    fetchMovimientos,
+    handleDelete,
+    handleCreate,
+    handleUpdate,
+  }), [
+    movimientos,
+    categorias,
+    loading,
+    isPending,
+    error,
+    fetchMovimientos,
+    handleDelete,
+    handleCreate,
+    handleUpdate,
+  ]);
 
   return (
-    <MovementsContext.Provider
-      value={{
-        movimientos,
-        categorias,
-        loading: loading || isPending,
-        error,
-        setError,
-        fetchMovimientos,
-        handleDelete,
-        handleCreate,
-        handleUpdate,
-      }}
-    >
+    <MovementsContext.Provider value={contextValue}>
       {children}
     </MovementsContext.Provider>
   );

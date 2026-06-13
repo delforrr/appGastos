@@ -16,6 +16,9 @@ import useMovements from "../hooks/useMovements";
 import { type Categoria } from "../services/movimientosService";
 import Movements from "../components/Movements";
 
+const PRIMARY_SKELETON = <Skeleton width="40%" />;
+const SECONDARY_SKELETON = <Skeleton width="60%" />;
+
 const Categorias = () => {
   const {
     movimientos,
@@ -99,8 +102,8 @@ const Categorias = () => {
                     sx={{ mr: 2.5 }}
                   />
                   <ListItemText
-                    primary={<Skeleton width="40%" />}
-                    secondary={<Skeleton width="60%" />}
+                    primary={PRIMARY_SKELETON}
+                    secondary={SECONDARY_SKELETON}
                   />
                   <Box sx={{ ml: "auto", textAlign: "right" }}>
                     <Skeleton width={80} height={24} />

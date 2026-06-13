@@ -45,10 +45,12 @@ const tableHeadeCells = [
   { id: "Acciones", label: "Acciones", align: "right" },
 ] as const;
 
+const EMPTY_CATEGORIAS: Categoria[] = [];
+
 const Movements = ({
   isRecent,
   movimientos,
-  categorias = [],
+  categorias = EMPTY_CATEGORIAS,
   canDelete,
   onDelete,
   loading = false,
