@@ -148,10 +148,12 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
               </ListItemIcon>
               <ListItemText
                 primary={item.label}
-                primaryTypographyProps={{
-                  sx: {
-                    fontWeight: isActive ? 600 : 500,
-                    fontSize: "14px",
+                slotProps={{
+                  primary: {
+                    sx: {
+                      fontWeight: isActive ? 600 : 500,
+                      fontSize: "14px",
+                    },
                   },
                 }}
               />

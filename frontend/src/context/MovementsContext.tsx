@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, use, useState, useEffect, useTransition, useCallback, useMemo } from "react";
 import {
   getMovimientos,
@@ -50,7 +51,7 @@ export const MovementsContextProvider: React.FC<{ children: React.ReactNode }> =
         setMovimientos(movs);
         setCategorias(cats);
       });
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error al cargar datos globales:", err);
       setError(
         "No se pudo establecer conexión con el servidor. Intente de nuevo más tarde.",
@@ -61,6 +62,7 @@ export const MovementsContextProvider: React.FC<{ children: React.ReactNode }> =
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchMovimientos();
   }, [fetchMovimientos]);
 

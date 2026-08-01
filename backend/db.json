@@ -147,6 +147,14 @@
       "fecha": "2026-06-09",
       "tipo": "ingreso",
       "id": "RfMUdiNd"
+    },
+    {
+      "concepto": "CNEISI 2026",
+      "categoriaId": "5",
+      "monto": 220000,
+      "fecha": "2026-06-16",
+      "tipo": "gasto",
+      "id": "IXI3Z3eZ"
     }
   ]
 }
